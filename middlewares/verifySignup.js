@@ -16,6 +16,7 @@ validateSignupRequestBody = async (req, res, next) => {
         return res.status(400).send({
             message: "Failed ! User name is not provided"
         })
+
     }
 
     // Validate if the userId is present and it's not duplicate
@@ -71,17 +72,19 @@ validateSignupRequestBody = async (req, res, next) => {
     }
 
     if (req.body.userType == constants.userTypes.admin) {
-        res.status(400).send({
+        return res.status(400).send({
             message: "ADMIN registration is not allowed"
         })
+
     }
 
     const userTypes = [constants.userTypes.customer, constants.userTypes.engineer];
 
     if (!userTypes.includes(req.body.userType)) {
-        res.status(400).send({
+        return res.status(400).send({
             message: "Provided userType is not correct. Possible correct values : CUSTOMER | ENGINEER"
         })
+
     }
 
     async function isValidEmail(email) {
