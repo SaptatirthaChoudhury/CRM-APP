@@ -5,7 +5,7 @@
 const User = require("../models/user.model");
 const constants = require("../utils/constants");
 
-const emailValidator = require('deep-email-validator');
+
 
 
 
