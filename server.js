@@ -60,10 +60,12 @@ async function init() {
 }
 
 /**
- * importing the routes
+ * importing the routes and connect to the server
  */
 const authRoute = require('./routes/auth.route');
 authRoute(app);
+const userRoute = require('./routes/user.route');
+userRoute(app);
 
 
 app.listen(serverConfig.PORT, () => {
