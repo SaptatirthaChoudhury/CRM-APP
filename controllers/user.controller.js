@@ -8,9 +8,26 @@ const objectConverter = require("../utils/objectConverter");
  */
 exports.findAll = async (req, res) => {
 
+    const queryObj = {};
+
+    /**
+     * Reading the optional query params
+     */
+    const userTypeQP = req.query.userType;
+    const userStatusQP = req.query.userStatus;
+
+    if (userTypeQP) {
+        queryObj.userType = userTypeQP;
+    }
+
+    if (userStatusQP) {
+        queryObj.userStatus = userStatusQP;
+    }
+
+
     try {
 
-        const users = await User.find();
+        const users = await User.find(queryObj);
         res.status(200).send(objectConverter.userResponse(users));
     } catch (err) {
         console.log("Error while fetching all the users");
@@ -19,4 +36,4 @@ exports.findAll = async (req, res) => {
         })
     }
 
-}
+} 
