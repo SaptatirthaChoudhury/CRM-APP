@@ -9,7 +9,7 @@ exports.userResponse = (users) => {
             name: user.name,
             userId: user.userId,
             email: user.email,
-            userTypes: user.userTypes,
+            userType: user.userType,
             userStatus: user.userStatus
         })
     });
