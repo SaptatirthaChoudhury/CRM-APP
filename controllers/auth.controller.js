@@ -21,6 +21,7 @@ const User = require("../models/user.model")
 const jwt = require("jsonwebtoken");
 const authConfig = require("../configs/auth.config");
 const constant = require("../utils/constants");
+const constants = require("../utils/constants");
 
 /**
  * Logic to accept the registration/signup
@@ -104,6 +105,22 @@ exports.signin = async (req, res) => {
                 message: "Failed ! UserId passed doesn't exist"
             })
         }
+
+        /**
+         * Check if the user is in PENDING state
+         */
+        if (user.userStatus == constants.userStatus.pending) {
+            return res.status(400).send({
+                message: "Not yet approved from the admin"
+            })
+        }
+
+        /**
+         * If the password passed is correct
+         */
+
+
+
 
         /**
          * If the password passed is correct
