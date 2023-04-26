@@ -32,26 +32,77 @@ const verifyToken = (req, res, next) => {
     })
 
     /**
-     * Read the value of the token id and set it in the request for further use
+     * Read the value of the token id and set it in the request for further use....
      */
 
 }
 
 const isAdmin = async (req, res, next) => {
     const user = await User.findOne({ userId: req.userId });
-
+   // console.log("user info from isAdmin func : ", user);
     if (user && user.userType == constants.userTypes.admin) {
         next();
-    }else{
+    } else {
         res.status(403).send({
             message: "Only ADMIN users are allowed to access this endpoint"
         })
     }
 }
 
+const isValidUserIdReqParam = async (req, res, next) => {
+    try {
+        const user = await User.find({ userId: req.params.id });
+       // console.log("user info from isValidUserIdReqParam : ", user);
+        if (!user) {
+            return res.status(400).send({
+                message: "UserId passed doesn't exist"
+            })
+        }
+        next();
+    } catch (err) {
+        console.log("Error while reading the user info", err.message);
+        return res.status(500).send({
+            message: "Internal server error while reading the user data"
+        })
+    }
+
+}
+
+
+const isAdminOrOwner = async (req, res, next) => {
+
+    /**
+     * Either the caller should be the ADMIN or the caller should be the owner of the userId
+     */
+
+    try {
+
+        const callingUser = await User.findOne({ userId: req.userId });
+        console.log("user info from isAdminOrOwner func : ", callingUser);
+        console.log("request params id : ", req.params.id);
+        if (callingUser.userType == constants.userTypes.admin || callingUser.userId == req.params.id) {
+            next();
+        } else {
+            res.status(403).send({
+                message: "Only admin or the owner is allowed to make this call"
+            })
+        }
+ 
+    } catch (err) {
+        console.log("Error while reading the user info", err.message);
+        return res.status(500).send({
+            message: "Internal server error while reading the user data"
+        })
+
+    }
+
+}
+
 const authJwt = {
     verifyToken: verifyToken,
-    isAdmin: isAdmin
+    isAdmin: isAdmin,
+    isValidUserIdReqParam: isValidUserIdReqParam,
+    isAdminOrOwner: isAdminOrOwner
 };
 
 module.exports = authJwt;
