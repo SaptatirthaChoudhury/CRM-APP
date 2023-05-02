@@ -12,7 +12,7 @@ module.exports = {
         rejected: "REJECTED"
 
     },
-    ticketStatuses: {
+    ticketStatus: {
         open: "OPEN",
         closed: "CLOSED",
         blocked: "BLOCKED"

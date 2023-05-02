@@ -19,8 +19,8 @@ const ticketSchema = new mongoose.Schema({
     status: {
         type: String,
         required: true,
-        default: constants.ticketStatuses.open,
-        enum: [constants.ticketStatuses.open, constants.ticketStatuses.closed, constants.ticketStatuses.blocked]
+        default: constants.ticketStatus.open,
+        enum: [constants.ticketStatus.open, constants.ticketStatus.closed, constants.ticketStatus.blocked]
     },
     reporter: {
         type: String,
