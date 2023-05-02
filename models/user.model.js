@@ -46,7 +46,15 @@ const userSchema = new mongoose.Schema({
         required: true,
         default: constants.userStatus.approved,
         enum: [constants.userStatus.approved, constants.userStatus.pending, constants.userStatus.rejected]
+    },
+    ticketsCreated: {
+        type: [mongoose.SchemaTypes.ObjectId],
+        ref: "Ticket"
+    },
+    ticketsAssigned: {
+        type: [mongoose.SchemaTypes.ObjectId],
+        ref: "Ticket"
     }
 })
-
+ 
 module.exports = mongoose.model("user", userSchema)
