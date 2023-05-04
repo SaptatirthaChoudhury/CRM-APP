@@ -63,16 +63,17 @@ exports.findByUserId = async (req, res) => {
 exports.update = async (req, res) => {
 
     try {
-        const user = await User.findOne({ userId: req.params.id });
+        const isAdminOrNot = await User.findOne({ userId: req.userId });
+        const user = await User.findOne({ userId: req.params.id })
 
         user.name = req.body.name != undefined ? req.body.name : user.name;
 
         if (req.body.userStatus || req.body.userType) {
 
-            if (user.userType == constants.userTypes.admin) {
+            if (isAdminOrNot.userType == constants.userTypes.admin) {
 
-                user.userStatus = req.body.userStatus;
-                user.userType = req.body.userType;
+                user.userStatus = req.body.userStatus != undefined ? req.body.userStatus : user.userStatus;
+                user.userType = req.body.userType != undefined ? req.body.userType : user.userType;
             } else {
                 return res.status(405).send({
                     message: "Only admin can change userStatus and userType field ! "

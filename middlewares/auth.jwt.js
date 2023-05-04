@@ -39,7 +39,7 @@ const verifyToken = (req, res, next) => {
 
 const isAdmin = async (req, res, next) => {
     const user = await User.findOne({ userId: req.userId });
-   // console.log("user info from isAdmin func : ", user);
+
     if (user && user.userType == constants.userTypes.admin) {
         next();
     } else {
@@ -52,7 +52,7 @@ const isAdmin = async (req, res, next) => {
 const isValidUserIdReqParam = async (req, res, next) => {
     try {
         const user = await User.find({ userId: req.params.id });
-       // console.log("user info from isValidUserIdReqParam : ", user);
+
         if (!user) {
             return res.status(400).send({
                 message: "UserId passed doesn't exist"
@@ -78,8 +78,7 @@ const isAdminOrOwner = async (req, res, next) => {
     try {
 
         const callingUser = await User.findOne({ userId: req.userId });
-        console.log("user info from isAdminOrOwner func : ", callingUser);
-        console.log("request params id : ", req.params.id);
+
         if (callingUser.userType == constants.userTypes.admin || callingUser.userId == req.params.id) {
             next();
         } else {
@@ -87,7 +86,7 @@ const isAdminOrOwner = async (req, res, next) => {
                 message: "Only admin or the owner is allowed to make this call"
             })
         }
- 
+
     } catch (err) {
         console.log("Error while reading the user info", err.message);
         return res.status(500).send({
