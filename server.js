@@ -66,6 +66,8 @@ const authRoute = require('./routes/auth.route');
 authRoute(app);
 const userRoute = require('./routes/user.route');
 userRoute(app);
+const ticketRoute = require("./routes/ticket.route");
+ticketRoute(app);
 
 
 app.listen(serverConfig.PORT, () => {
