@@ -3,7 +3,7 @@
  */
 
 const ticketController = require("../controllers/ticket.controller");
-const { authJwt } = require("../middlewares")
+const { authJwt, validUser } = require("../middlewares")
 
 module.exports = (app) => {
 
@@ -24,4 +24,9 @@ module.exports = (app) => {
      * Or if user is engineer then he/she can see all the tickets assigned to him/her -------
      */
     app.get("/crm/api/v1/tickets/", [authJwt.verifyToken], ticketController.getAllTickets)
+
+    /**
+     * Privilages according to user to update the endpoint
+     */
+    app.put("/crm/api/v1/tickets/:id", [authJwt.verifyToken, validUser.checkForValidUser], ticketController.updateTickets)
 } 
