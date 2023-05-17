@@ -1,6 +1,6 @@
 const verifySignUp = require("./verifySignup");
 const authJwt = require("./auth.jwt");
-const verifyUser = require("./checkForValidUser");
+const verifyUserForTicket = require("./checkForValidUser");
 
 /**
  * I can add more middleware here as the project grows
@@ -8,5 +8,5 @@ const verifyUser = require("./checkForValidUser");
 module.exports = {
     verifySignUp,
     authJwt,
-    verifyUser
+    verifyUserForTicket
 }
