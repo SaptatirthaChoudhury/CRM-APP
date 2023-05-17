@@ -51,7 +51,7 @@ exports.createTicket = async (req, res) => {
         }
 
         /**
-         * Now create the ticket (ticket object already created and now creating ticket as an entity)
+         * Now create the ticket (ticket object is already created and now creating ticket as an collection)
          *      - Insert that ticket id in customer and engineer document
          */
 
@@ -152,4 +152,49 @@ exports.getAllTickets = async (req, res) => {
     res.status(200).send(tickets);
 
 
+}
+
+
+/**
+ * Write the controller function to take care of updates
+ */
+exports.updateTicket = async (req, res) => {
+    try {
+        const ticket = await Ticket.findOne({ _id: req.params.id });
+        const oldAssigneeEngineer = ticket.assignee;
+        /**
+         * Update this ticket object based on the request body passed
+         */
+
+        ticket.title = req.body.title != undefined ? req.body.title : ticket.title;
+        ticket.description = req.body.description != undefined ? req.body.description : ticket.description;
+        ticket.ticketPriority = req.body.ticketPriority != undefined ? req.body.ticketPriority : ticket.ticketPriority;
+        ticket.status = req.body.status != undefined ? req.body.status : ticket.status;
+        ticket.assignee = req.body.assignee != undefined ? req.body.assignee : ticket.assignee;
+
+        const updatedTicket = await ticket.save();
+        console.log("updatedTicket : ", updatedTicket);
+        /**
+         * Let's say admin has handover the ticket to another engineer then assignee engineer document must be updated 
+         */
+        if (oldAssigneeEngineer != updatedTicket.assignee) {
+            const newAssigneeEngineer = await User.findOne({ userId: updatedTicket.assignee });
+            console.log("newAssignedEngineer : ", newAssigneeEngineer);
+            newAssigneeEngineer.ticketsAssigned.push(updatedTicket._id);
+
+            await newAssigneeEngineer.save();
+        }
+
+        /**
+         * If newAssigneeEngineer got updated then oldAssigneeEngineer must be updated by removing ticketId 
+         */
+        await User.updateOne({ userId: oldAssigneeEngineer }, { $pull: { ticketsAssigned: updatedTicket._id } })
+
+        res.status(200).send(updatedTicket);
+    } catch (err) {
+        console.log("Some error while updating the ticket ", err.message);
+        return res.status(500).send({
+            message: "Some internal error while updating the ticket"
+        })
+    }
 }
