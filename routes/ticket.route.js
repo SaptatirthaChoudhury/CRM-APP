@@ -3,7 +3,7 @@
  */
 
 const ticketController = require("../controllers/ticket.controller");
-const { authJwt, validUser } = require("../middlewares")
+const { authJwt, verifyUserForTicket } = require("../middlewares")
 
 module.exports = (app) => {
 
@@ -28,5 +28,5 @@ module.exports = (app) => {
     /**
      * Privilages according to user to update the endpoint
      */
-    app.put("/crm/api/v1/tickets/:id", [authJwt.verifyToken, validUser.checkForValidUser], ticketController.updateTickets)
+    app.put("/crm/api/v1/tickets/:id", [authJwt.verifyToken, verifyUserForTicket.checkForValidUserForTicket], ticketController.updateTicket)
 } 
