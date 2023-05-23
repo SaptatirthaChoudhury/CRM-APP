@@ -1,6 +1,10 @@
 /**
  * This file should have the logic to create controller for Ticket resource
  */
+const User = require("../models/user.model");
+const Ticket = require("../models/ticket.model");
+const constants = require("../utils/constants");
+const sendNotificationReq = require("../utils/notificationClient");
 
 /**
  * Method to create the logic of creating tickets
@@ -12,12 +16,9 @@
  *            -- Middleware should take care of this 
  * 
  * 3. After the ticket is created, ensure the customer and Engineer documents
+ * 
+ * 4. Send the email after the ticket is created to all the stakeholders
  */
-
-const User = require("../models/user.model");
-const Ticket = require("../models/ticket.model");
-const constants = require("../utils/constants");
-
 
 exports.createTicket = async (req, res) => {
 
@@ -72,6 +73,9 @@ exports.createTicket = async (req, res) => {
                 engineer.ticketsAssigned.push(ticketCreated._id);
                 await engineer.save();
             }
+
+            //Now we should send the notification request to notificationService
+            sendNotificationReq(`subject : ${ticketCreated.title}`, `content : ${ticketCreated.description}`, `${customer.email}, ${engineer.email}`, "CRM APP");
 
             res.status(201).send(ticketCreated);
         }
