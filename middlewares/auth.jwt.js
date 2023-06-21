@@ -38,15 +38,20 @@ const verifyToken = (req, res, next) => {
 }
 
 const isAdmin = async (req, res, next) => {
-    const user = await User.findOne({ userId: req.userId });
+    try {
+        const user = await User.findOne({ userId: req.userId });
 
-    if (user && user.userType == constants.userTypes.admin) {
-        next();
-    } else {
-        res.status(403).send({
-            message: "Only ADMIN users are allowed to access this endpoint"
-        })
+        if (user && user.userType == constants.userTypes.admin) {
+            next();
+        } else {
+            res.status(403).send({
+                message: "Only ADMIN users are allowed to access this endpoint"
+            })
+        }
+    } catch (err) {
+        console.log("Error while reading the user info", err.message);
     }
+
 }
 
 const isValidUserIdReqParam = async (req, res, next) => {

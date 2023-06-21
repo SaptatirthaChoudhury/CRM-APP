@@ -72,7 +72,7 @@ validateSignupRequestBody = async (req, res, next) => {
     }
 
     if (req.body.userType == constants.userTypes.admin) {
-        res.status(403).send({
+        return res.status(403).send({
             message: "ADMIN registration is not allowed !"
         })
 
