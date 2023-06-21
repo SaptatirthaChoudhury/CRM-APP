@@ -70,7 +70,10 @@ const ticketRoute = require("./routes/ticket.route");
 ticketRoute(app);
 
 
-app.listen(serverConfig.PORT, () => {
+/**
+ * So this can be used for the integration testing
+ */
+module.exports = app.listen(serverConfig.PORT, () => {
 
     console.log(`Started the server on the PORT number : ${serverConfig.PORT}`);
 }) 
