@@ -125,3 +125,12 @@ describe("test findAll method", () => {
         })
     })
 })  
+
+/**
+ * Write the test for the update method
+ */
+
+describe("test update method", () => {
+
+    it()
+})
