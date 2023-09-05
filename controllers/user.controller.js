@@ -94,7 +94,7 @@ exports.update = async (req, res) => {
         });
     } catch (err) {
         console.log("Error while DB operation", err.message);
-        res.status(500).send({
+        return res.status(500).send({
             message: "Internal server error"
         })
     }
